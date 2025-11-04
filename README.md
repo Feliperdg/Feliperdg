@@ -12,4 +12,4 @@
 
 ![Rodrigues GitHub stats](https://github-readme-stats.vercel.app/api?username=Feliperdg&show_icons=true&theme=dracula)
 
-### Apaixonado por tecnologia, estudante de ADS 💻
+### 
